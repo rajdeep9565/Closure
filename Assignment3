@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movie</title>
+    <style>
+        body{background-color:lightgreen;}
+      h1{ padding-top: 50px;height: 100px;background-color: darkblue;text-align: center;color:lightcoral}
+    img{width:230px;height: 230px;;}
+     .movie_div{display:inline-block;width:300px;height:300px;margin-bottom: 5%}   
+     h2{overflow: hidden;}  /*  titles    */
+     div#parent{margin-left: 7%;}
+
+    </style>
+</head>
+<body>
+   
+
+<h1>Trending Now</h1>
+<div id ="parent"></div>
+
+</body>
+</html>
+
+<script>
+// key = 5e7dbd84fc930383163afd0c3163f4a0
+   async function Movie_search(){
+    
+    let res = await fetch
+        (`https://api.themoviedb.org/3/trending/all/day?api_key=5e7dbd84fc930383163afd0c3163f4a0`)
+       let data = await res.json();
+       let movie_data = data.results
+
+       console.log(movie_data);
+    
+    appendDescription(movie_data)
+   }
+   Movie_search()
+
+var parent = document.getElementById("parent");
+   function appendDescription(Video_data) {
+   
+        // des.innerHTML = null;
+        Video_data.forEach(({ original_title,first_air_date,popularity,original_language,name,vote_average,poster_path,media_type,release_date}) => {
+
+           // image link = ("https://image.tmdb.org/t/p/original/" + poster_path);
+            var main_div = document.createElement("div");
+            main_div.className += "movie_div"
+            var image_div = document.createElement("div");
+            var img = document.createElement("img");
+            img.src = "https://image.tmdb.org/t/p/original/" + poster_path
+
+            
+            if(original_title == undefined) {
+               var title = document.createElement("h4");
+               title.innerHTML = name
+            } else {
+                var title = document.createElement("h4");
+            title.innerHTML = original_title;
+            }
+
+            if(release_date == undefined) {
+                var r_date = document.createElement("p");
+                r_date.innerHTML = first_air_date
+            } else {
+                var r_date = document.createElement("p");
+            r_date.innerHTML = release_date;
+            }
+
+
+            
+
+            var rating = document.createElement("p");
+            rating.innerHTML = vote_average + "★"
+            
+            
+
+
+
+            image_div.append(img)
+            main_div.append(image_div,title,r_date,rating);
+            parent.append(main_div);
+        });
+}
+
+
+</script>
